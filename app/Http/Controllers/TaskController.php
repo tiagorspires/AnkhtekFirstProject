@@ -15,6 +15,12 @@ class TaskController extends Controller
         return view('/welcome', ['tasks' => $tasks]);
     }
 
+    public function show($id = null)
+    {
+        $task = Task::findOrFail($id);
+        return view('tasks/task', ['task' => $task]);
+    }
+
     public function create()
     {
         return view('tasks.create');
@@ -22,12 +28,23 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->all());
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'required|integer|in:1,2,3',
+            'userID' => 'required|exists:users,id',
+        ]);
+
         $task = new Task;
-        /*
         $task->title = $request->title;
         $task->description = $request->description;
+        $task->status = $request->status;
+        $task->user_id = $request->userID;
         $task->save();
-        */
-        return redirect('/')->with('msg', 'Tarefa criada com sucesso!');
+
+        return redirect('/')->with('msg', 'Task successfully created!');
     }
+
 }
