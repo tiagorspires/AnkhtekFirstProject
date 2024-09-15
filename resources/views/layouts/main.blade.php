@@ -31,6 +31,9 @@
                     <a href="/tasks/create" class="nav-link">Create Task</a>
                 </li>
                 <li class="nav-item">
+                    <a href="/users" class="nav-link">Users</a>
+                </li>
+                <li class="nav-item">
                     <a href="/" class="nav-link">Login</a>
                 </li>
                 <li class="nav-item">

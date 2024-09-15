@@ -26,6 +26,34 @@ class TaskController extends Controller
         return view('tasks.create');
     }
 
+    public function edit($id) {
+
+        $task = Task::findOrFail($id);
+
+        return view('/tasks/edit', ['task' => $task]);
+
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'required|integer|in:1,2,3',
+            'userID' => 'required|exists:users,id',
+        ]);
+
+        $task = Task::findOrFail($request->id);
+        $task->title = $request->title;
+        $task->description = $request->description;
+        $task->status = $request->status;
+        $task->user_id = $request->userID;
+        $task->save();
+
+        return redirect('/')->with('msg', 'Task successfully updated!');
+
+    }
+
     public function store(Request $request)
     {
         //dd($request->all());

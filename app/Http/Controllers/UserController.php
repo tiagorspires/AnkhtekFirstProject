@@ -3,15 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * Cria um novo usuário.
-     */
+    public function index()
+    {
+        $users = User::all();
+        return view('/users/users', ['users' => $users]);
+    }
+
+    public function show($id = null)
+    {
+        $user = User::findOrFail($id);
+        return view('users/user', ['user' => $user]);
+    }
     public function store(Request $request)
     {
         // Validação dos dados de entrada
