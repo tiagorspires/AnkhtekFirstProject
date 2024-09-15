@@ -75,4 +75,11 @@ class TaskController extends Controller
         return redirect('/')->with('msg', 'Task successfully created!');
     }
 
+    public function destroy($id)
+    {
+        $task = Task::findOrFail($id);
+        $task->delete();
+        return redirect('/')->with('msg', 'Task successfully deleted!');
+    }
+
 }
