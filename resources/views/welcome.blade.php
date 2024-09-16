@@ -14,77 +14,84 @@
     <div id="events-container" class="col-md-12">
         <h2>Next tasks</h2>
         <div id="cards-container" class="row">
-            @foreach($tasks as $task)
-                <div class="card col-md-3">
-                    <img src="/img/task_placeholder.png" alt="{{ $task->title }}">
-                    <div class="card-body">
-                        <p class="card-date">10/09/2021</p>
-                        <h5 class="card-title">{{ $task->title }}</h5>
-                        <p class="card-user">User {{$task->user_id}}</p>
-                        <a href="/task/{{$task->id}}" class="btn btn-primary">Details</a>
-
-
-                        @if($task->status != 'completed')
-                            <button class="btn btn-success complete-task" data-id="{{ $task->id }}">Complete</button>
-                        @endif
-
-                        <a href="/task/edit/{{ $task->id }}" class="btn btn-secondary">Edit</a>
-
-                        <form class="deletetask" action="/tasks/{{ $task->id }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger delete-btn">
-                                <ion-icon name="trash-outline"></ion-icon> Delete
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            @endforeach
+            <!-- Cards will be injected here via Ajax -->
         </div>
     </div>
 
     <script type="text/javascript">
         $(document).ready(function() {
 
-            $('.complete-task').on('click', function() {
-                const taskId = $(this).data('id');
+            $.ajax({
+                url: '/tasks-users',
+                type: 'GET',
+                success: function(data) {
+                    const tasks = data.tasks;
+                    const users = data.users;
+                    let cardsContainer = $('#cards-container');
+                    cardsContainer.empty();
 
-                jQuery.ajax({
-                    url: '/tasks/complete/' + taskId,
-                    type: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(result) {
-                        alert(result.message);
-                        location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                        alert('An error occurred: ' + error);
-                    }
-                });
+                    tasks.forEach(task => {
+                        const user = users.find(user => user.id === task.user_id);
+                        const userName = user ? user.name : 'Unknown';
+
+                        // Create the card for each task
+                        const taskCard = `
+                            <div class="card col-md-3" data-id="${task.id}">
+                                <img src="/img/task_placeholder.png" alt="${task.title}">
+                                <div class="card-body">
+                                    <p class="card-date">${task.created_at}</p>
+                                    <h5 class="card-title">${task.title}</h5>
+                                    <p class="card-user">User: ${userName}</p>
+                                    <a href="/task/${task.id}" class="btn btn-primary">Details</a>
+                                    ${task.status != 'completed' ? `<button class="btn btn-success complete-task" data-id="${task.id}">Complete</button>` : ''}
+                                    <a href="/task/edit/${task.id}" class="btn btn-secondary">Edit</a>
+                                    <form class="deletetask" data-id="${task.id}" action="/tasks/${task.id}" method="POST" style="display:inline;">
+                                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger delete-btn">
+                            <ion-icon name="trash-outline"></ion-icon> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+`;
+                        cardsContainer.append(taskCard);
+                    });
+
+                    // Bind delete function
+                    bindDeleteEvent();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('An error occurred: ' + error);
+                }
             });
 
-            $('.deletetask').on('submit', function(event) {
-                event.preventDefault();
+            // Function to bind delete event to the forms
+            function bindDeleteEvent() {
+                $('.deletetask').on('submit', function(event) {
+                    event.preventDefault();
 
-                const form = $(this);
+                    const form = $(this);
+                    const taskId = form.data('id');
 
-                jQuery.ajax({
-                    url: form.attr('action'),
-                    data: form.serialize(),
-                    type: 'POST',
-                    success: function(result) {
-                        alert(result.message);
-                        form.closest('.card').remove();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                        alert('An error occurred: ' + error);
+                    if(confirm("Are you sure you want to delete this task?")) {
+                        jQuery.ajax({
+                            url: form.attr('action'),
+                            data: form.serialize(),
+                            type: 'POST',
+                            success: function(result) {
+                                alert(result.message);
+                                $('div.card[data-id="' + taskId + '"]').remove();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                                alert('An error occurred: ' + error);
+                            }
+                        });
                     }
                 });
-            });
+            }
         });
     </script>
 

@@ -16,3 +16,4 @@ Route::post('/tasks/complete/{id}', [TaskController::class, 'complete']);
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/user/{id?}', [UserController::class, 'show']);
 
+Route::get('/tasks-users', [TaskController::class, 'getAllTasksAndUsers']);

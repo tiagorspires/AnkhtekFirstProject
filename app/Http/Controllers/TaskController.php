@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Task;
 
@@ -89,6 +90,18 @@ class TaskController extends Controller
 
         return response()->json(['message' => 'Task completed!']);
     }
+
+    public function getAllTasksAndUsers()
+    {
+        $tasks = Task::all();
+        $users = User::all();
+
+        return response()->json([
+            'tasks' => $tasks,
+            'users' => $users
+        ]);
+    }
+
 
 
 }
