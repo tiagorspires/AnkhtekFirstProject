@@ -20,8 +20,6 @@
 </head>
 <body>
 
-<div id="message"></div>
-
 <header>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="collapse navbar-collapse" id="navbar">
