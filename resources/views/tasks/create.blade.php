@@ -4,7 +4,8 @@
 
 @section('content')
 
-    <div id="message"></div>
+
+
 
     <div id="task-create-container" class="col-md-6 offset-md-3">
         <h1>Create new task</h1>

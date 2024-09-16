@@ -56,7 +56,6 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request->all());
 
         $request->validate([
             'title' => 'required|string|max:255',
@@ -79,7 +78,7 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($id);
         $task->delete();
-        return redirect('/')->with('msg', 'Task successfully deleted!');
+        return response()->json(['message' => 'Task successfully deleted!']);
     }
 
 }

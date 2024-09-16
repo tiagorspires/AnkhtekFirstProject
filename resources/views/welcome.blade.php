@@ -16,21 +16,51 @@
         <div id="cards-container" class="row">
             @foreach($tasks as $task)
                 <div class="card col-md-3">
-                    <img src="/img/task_placeholder.png" alt="{{ $task -> title }}">
+                    <img src="/img/task_placeholder.png" alt="{{ $task->title }}">
                     <div class="card-body">
                         <p class="card-date">10/09/2021</p>
-                        <h5 class="card-title">{{ $task -> title }}</h5>
-                        <p class="card-user">User {{$task -> user_id}}</p>
-                        <a href="/task/{{$task -> id}}" class="btn btn-primary">Details</a>
-                        <form action="/tasks/{{ $task->id }}" method="POST">
+                        <h5 class="card-title">{{ $task->title }}</h5>
+                        <p class="card-user">User {{$task->user_id}}</p>
+                        <a href="/task/{{$task->id}}" class="btn btn-primary">Details</a>
+                        <form class="deletetask" action="/tasks/{{ $task->id }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger delete-btn"><ion-icon name="trash-outline"></ion-icon> Delete</button>
+                            <button type="submit" class="btn btn-danger delete-btn">
+                                <ion-icon name="trash-outline"></ion-icon> Delete
+                            </button>
                         </form>
                     </div>
                 </div>
             @endforeach
         </div>
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.deletetask').on('submit', function(event) {
+                event.preventDefault();
+
+                const form = $(this); // Get the form that triggered the event
+
+                jQuery.ajax({
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    type: 'POST',
+                    success: function(result) {
+
+                        alert(result.message);
+                        form.closest('.card').remove();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('An error occurred: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+
 
 
 
