@@ -72,7 +72,7 @@ class TaskController extends Controller
         $task->user_id = $request->userID;
         $task->save();
 
-        return redirect('/')->with('msg', 'Task successfully created!');
+        return response()->json(['message' => 'Task successfully created!']);
     }
 
     public function destroy($id)

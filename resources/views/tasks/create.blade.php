@@ -4,10 +4,13 @@
 
 @section('content')
 
+    <div id="message"></div>
+
     <div id="task-create-container" class="col-md-6 offset-md-3">
         <h1>Create new task</h1>
-        <form action="/tasks" method="POST">
-            @csrf
+        <form id="addtask" action="/tasks" method="POST">
+
+        @csrf
             <div class="form-group">
                 <label for="title">Task:</label>
                 <input type="text" class="form-control" id="title" name="title" placeholder="Task title...">
@@ -31,5 +34,23 @@
             <input type="submit" class="btn btn-primary" value="Create Task">
         </form>
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#addtask').on('submit', function(event) {
+                event.preventDefault();
+                jQuery.ajax({
+                    url: "{{ url('/tasks') }}",
+                    data: jQuery('#addtask').serialize(),
+                    type: 'POST',
+                    success: function(result) {
+                        $('#message').css('display', 'block');
+                        jQuery('#message').html(result.message);
+                         jQuery('#addtask')[0].reset();
+                    }
+                });
+            });
+        });
+    </script>
 
 @endsection

@@ -21,11 +21,11 @@
                         <p class="card-date">10/09/2021</p>
                         <h5 class="card-title">{{ $task -> title }}</h5>
                         <p class="card-user">User {{$task -> user_id}}</p>
-                        <a href="#" class="btn btn-primary">Saber mais</a>
+                        <a href="/task/{{$task -> id}}" class="btn btn-primary">Details</a>
                         <form action="/tasks/{{ $task->id }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger delete-btn"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
+                            <button type="submit" class="btn btn-danger delete-btn"><ion-icon name="trash-outline"></ion-icon> Delete</button>
                         </form>
                     </div>
                 </div>
