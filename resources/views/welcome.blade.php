@@ -35,17 +35,17 @@
 
                         // Create the card for each task
                         const taskCard = `
-                    <div class="card col-md-3" data-id="${task.id}">
-                        <img src="/img/task_placeholder.png" alt="${task.title}">
-                        <div class="card-body">
-                            <p class="card-date">${task.created_at}</p>
-                            <h5 class="card-title">${task.title}</h5>
-                            <p class="card-user">User: ${userName}</p>
-                            <a href="/task/${task.id}" class="btn btn-primary">Details</a>
-                            ${task.status != 'completed' ? `<button class="btn btn-success complete-task" data-id="${task.id}">Complete</button>` : ''}
-                            <a href="/task/edit/${task.id}" class="btn btn-secondary">Edit</a>
-                            <form class="deletetask" data-id="${task.id}" action="/tasks/${task.id}" method="POST" style="display:inline;">
-                                @csrf
+                        <div class="card col-md-3" data-id="${task.id}">
+                            <img src="/img/task_placeholder.png" alt="${task.title}">
+                            <div class="card-body">
+                                <p class="card-date">${task.created_at}</p>
+                                <h5 class="card-title">${task.title}</h5>
+                                <p class="card-user">User: ${userName}</p>
+                                <a href="/task/${task.id}" class="btn btn-primary">Details</a>
+                                ${task.status != 'completed' ? `<button class="btn btn-success complete-task" data-id="${task.id}">Complete</button>` : ''}
+                                <a href="/task/edit/${task.id}" class="btn btn-secondary">Edit</a>
+                                <form class="deletetask" data-id="${task.id}" action="/tasks/${task.id}" method="POST" style="display:inline;">
+                                    @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger delete-btn">
                             <ion-icon name="trash-outline"></ion-icon> Delete
@@ -74,7 +74,9 @@
                                 },
                                 success: function(result) {
                                     alert(result.message);
-                                    $('div.card[data-id="' + taskId + '"]').remove();
+                                    // Oculte o botão de completar
+                                    $('div.card[data-id="' + taskId + '"] .complete-task').hide();
+
                                 },
                                 error: function(xhr, status, error) {
                                     console.error(xhr.responseText);
@@ -116,7 +118,7 @@
                 });
             }
         });
-
     </script>
+
 
 @endsection
