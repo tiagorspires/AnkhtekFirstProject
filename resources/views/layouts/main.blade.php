@@ -28,20 +28,35 @@
             </a>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="/" class="nav-link">Tasks</a>
-                </li>
-                <li class="nav-item">
                     <a href="/tasks/create" class="nav-link">Create Task</a>
                 </li>
                 <li class="nav-item">
                     <a href="/users" class="nav-link">Users</a>
                 </li>
-                <li class="nav-item">
-                    <a href="/" class="nav-link">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a href="/" class="nav-link">Register</a>
-                </li>
+                @auth
+                    <li class="nav-item">
+                        <a href="/dashboard" class="nav-link">Next Tasks</a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="/logout" method="POST">
+                            @csrf
+                            <a href="/logout"
+                               class="nav-link"
+                               onclick="event.preventDefault();
+                    this.closest('form').submit();">
+                                Logout
+                            </a>
+                        </form>
+                    </li>
+                @endauth
+                @guest
+                    <li class="nav-item">
+                        <a href="/login" class="nav-link">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/register" class="nav-link">Register</a>
+                    </li>
+                @endguest
             </ul>
         </div>
     </nav>

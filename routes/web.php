@@ -17,3 +17,13 @@ Route::get('/users', [UserController::class, 'index']);
 Route::get('/user/{id?}', [UserController::class, 'show']);
 
 Route::get('/tasks-users', [TaskController::class, 'getAllTasksAndUsers']);
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
