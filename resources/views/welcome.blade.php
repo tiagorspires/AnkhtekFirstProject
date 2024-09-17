@@ -20,7 +20,6 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-
             $.ajax({
                 url: '/tasks-users',
                 type: 'GET',
@@ -36,17 +35,17 @@
 
                         // Create the card for each task
                         const taskCard = `
-                            <div class="card col-md-3" data-id="${task.id}">
-                                <img src="/img/task_placeholder.png" alt="${task.title}">
-                                <div class="card-body">
-                                    <p class="card-date">${task.created_at}</p>
-                                    <h5 class="card-title">${task.title}</h5>
-                                    <p class="card-user">User: ${userName}</p>
-                                    <a href="/task/${task.id}" class="btn btn-primary">Details</a>
-                                    ${task.status != 'completed' ? `<button class="btn btn-success complete-task" data-id="${task.id}">Complete</button>` : ''}
-                                    <a href="/task/edit/${task.id}" class="btn btn-secondary">Edit</a>
-                                    <form class="deletetask" data-id="${task.id}" action="/tasks/${task.id}" method="POST" style="display:inline;">
-                                        @csrf
+                    <div class="card col-md-3" data-id="${task.id}">
+                        <img src="/img/task_placeholder.png" alt="${task.title}">
+                        <div class="card-body">
+                            <p class="card-date">${task.created_at}</p>
+                            <h5 class="card-title">${task.title}</h5>
+                            <p class="card-user">User: ${userName}</p>
+                            <a href="/task/${task.id}" class="btn btn-primary">Details</a>
+                            ${task.status != 'completed' ? `<button class="btn btn-success complete-task" data-id="${task.id}">Complete</button>` : ''}
+                            <a href="/task/edit/${task.id}" class="btn btn-secondary">Edit</a>
+                            <form class="deletetask" data-id="${task.id}" action="/tasks/${task.id}" method="POST" style="display:inline;">
+                                @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger delete-btn">
                             <ion-icon name="trash-outline"></ion-icon> Delete
@@ -58,8 +57,32 @@
                         cardsContainer.append(taskCard);
                     });
 
-                    // Bind delete function
+                    // Bind delete event
                     bindDeleteEvent();
+
+                    // Bind complete task function
+                    $('.complete-task').off('click').on('click', function() {
+                        const button = $(this);
+                        const taskId = button.data('id');
+
+                        if(confirm("Are you sure you want to complete this task?")) {
+                            $.ajax({
+                                url: `/tasks/complete/${taskId}`,
+                                type: 'POST',
+                                data: {
+                                    _token: '{{ csrf_token() }}'
+                                },
+                                success: function(result) {
+                                    alert(result.message);
+                                    $('div.card[data-id="' + taskId + '"]').remove();
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error(xhr.responseText);
+                                    alert('An error occurred: ' + error);
+                                }
+                            });
+                        }
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
@@ -67,7 +90,7 @@
                 }
             });
 
-            // Function to bind delete event to the forms
+            // Function to bind delete event
             function bindDeleteEvent() {
                 $('.deletetask').on('submit', function(event) {
                     event.preventDefault();
@@ -93,6 +116,7 @@
                 });
             }
         });
+
     </script>
 
 @endsection
