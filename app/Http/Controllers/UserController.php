@@ -12,8 +12,19 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-        return view('/users/users', ['users' => $users]);
+        $search = request('search');
+
+        if($search) {
+
+            $users = User::where([
+                ['name', 'like', '%'.$search.'%']
+            ])->get();
+
+        } else {
+            $users = User::all();
+        }
+
+        return view('/users/users', ['users' => $users, 'search' => $search]);
     }
 
     public function show($id = null)
