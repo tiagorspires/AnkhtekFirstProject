@@ -5,7 +5,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TaskController::class, 'index']);
-Route::get('/tasks/create', [TaskController::class, 'create']);
+Route::get('/tasks/create', [TaskController::class, 'create'])->middleware('auth');
 Route::post('/tasks', [TaskController::class, 'store']);
 Route::get('/task/{id?}', [TaskController::class, 'show']);
 Route::get('/task/edit/{id}', [TaskController::class, 'edit']);
