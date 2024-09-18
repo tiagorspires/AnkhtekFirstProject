@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Edit Task {{$task -> id}}')
+@section('title', 'Edit Task')
 
 @section('content')
 
@@ -14,7 +14,7 @@
                 <input type="text" class="form-control" id="title" name="title" placeholder="Task title...">
             </div>
             <div class="form-group">
-                <label for="title">Descrição:</label>
+                <label for="title">Description:</label>
                 <textarea name="description" id="description" class="form-control" placeholder="Description of the task..."></textarea>
             </div>
             <div class="form-group">
