@@ -185,4 +185,6 @@ This project was developed as part of a technical test. Below are the instructio
 
 4. **WHERE**: Filters the results to include only tasks with the status `in_progress`.
 
+## Additional Features
 
+- **Search Users**: Allows searching for users by name.
