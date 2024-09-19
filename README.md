@@ -7,7 +7,7 @@ This project was developed as part of a technical test. Below are the instructio
 - **Backend**: Laravel (PHP Framework)
 - **Database**: MySQL
 - **Frontend**: JavaScript/AJAX
-- **Authentication**: Laravel Jetstream
+
 
 ## Requirements to Run the Project
 
